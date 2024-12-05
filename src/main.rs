@@ -232,7 +232,7 @@ fn main() {
     let home_was = new_edge(Location::WAS, Transportation::Car, 78, 0, 33.3, 0);
     let home_bal_walk = new_edge(Location::BAL, Transportation::Walk, 18, 0, 0.0, -7);
     let home_bal_bike = new_edge(Location::BAL, Transportation::PersonalBike, 7, 0, 0.0, -2);
-    let home_bal_drive = new_edge(Location::BAL, Transportation::Car, 8, 0, 28.22, 2);
+    let home_bal_drive = new_edge(Location::BAL, Transportation::Car, 8, 0, 23.22, 2);
     let home_ncr = new_edge(Location::NCR, Transportation::Car, 58, 0, 11.99, 0);
 
     let home_vec = vec![home_arl, home_was, home_bal_walk, home_bal_bike, home_bal_drive, home_ncr];
@@ -252,7 +252,7 @@ fn main() {
 
     let was_arl_bike = new_edge(Location::ARL, Transportation::PersonalBike, 40, 0, 0.0, -5);
     let was_arl_bikeshare = new_edge(Location::ARL, Transportation::Bikeshare, 40, 0, 3.00, -1);
-    let was_arl_ebike = new_edge(Location::ARL, Transportation::ElectricBikeshare, 40, 0, 7.00, -1);
+    let was_arl_ebike = new_edge(Location::ARL, Transportation::ElectricBikeshare, 40, 0, 7.00, -4);
     let was_ros = new_edge(Location::ROS, Transportation::Metro, 24, 7, 2.55, 2);
 
     let was_vec = vec![was_arl_bike, was_arl_bikeshare, was_arl_ebike, was_ros];
@@ -306,11 +306,13 @@ fn main() {
     let mut cleaned_result = result.iter().map(|(edges, values)| {(edges, values.unwrap())}
             ).collect::<Vec<_>>();
 
-    cleaned_result.sort_by_key(|(edges, (time, cost, hassle_units))| {*time});
+    //cleaned_result.sort_by_key(|(edges, (time, cost, hassle_units))| {*hassle_units});
 
-    //cleaned_result.sort_by(|(_, (_, cost, _)), (_, (_, other_cost, _))| {
-    //    cost.partial_cmp(other_cost).unwrap_or(std::cmp::Ordering::Equal)
-    //});
+    cleaned_result.sort_by(|(_, (_, cost, _)), (_, (_, other_cost, _))| {
+        cost.partial_cmp(other_cost).unwrap_or(std::cmp::Ordering::Equal)
+    });
+    
+    println!("{:?}",cleaned_result.len());
 
     for result in cleaned_result {
         for edge in result.0.iter() {
@@ -321,6 +323,7 @@ fn main() {
         println!("Hassle Units: {:?}", result.1.2);
         println!();
     }
+
 
 
 }
